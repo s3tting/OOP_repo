@@ -4,6 +4,8 @@ import entities.interfaces.Tank;
 
 public class TankImpl extends BaseMachine implements Tank {
     private static final int INITIAL_HEALTH = 100;
+    private static final double ATTACK_POINTS_STEP = 40.0;
+    private static final double DEFENSE_POINTS_STEP = 30.0;
 
     private boolean defenceMode;
     private double attackPointsModifier;
@@ -26,6 +28,13 @@ public class TankImpl extends BaseMachine implements Tank {
     @Override
     public void toggleDefenseMode() {
         this.defenceMode = !this.defenceMode;
+        if(this.defenceMode){
+            this.attackPointsModifier -= ATTACK_POINTS_STEP;
+            this.defensePointsModifier += DEFENSE_POINTS_STEP;
+        }else{
+            this.attackPointsModifier += ATTACK_POINTS_STEP;
+            this.defensePointsModifier -= DEFENSE_POINTS_STEP;
+        }
     }
 
     @Override
@@ -33,8 +42,4 @@ public class TankImpl extends BaseMachine implements Tank {
         return 0;
     }
 
-    @Override
-    public void attack(String target) {
-
-    }
 }

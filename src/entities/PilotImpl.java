@@ -1,5 +1,6 @@
 package entities;
 
+import common.Validation;
 import entities.interfaces.Machine;
 import entities.interfaces.Pilot;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 public class PilotImpl implements Pilot {
     private static final String NAME_MISSING_ERROR = "Pilot name cannot be null or empty string.";
+    private static final String MACHINE_MISSING_ERROR = "Null machine cannot be added to the pilot";
 
     private String name;
     private List<Machine> machines;
@@ -19,9 +21,8 @@ public class PilotImpl implements Pilot {
     }
 
     public void setName(String name) {
-        if(name == null || name.trim().isEmpty()){
-            throw new IllegalArgumentException(NAME_MISSING_ERROR);
-        }
+        Validation.requireNonEmptyString(name,NAME_MISSING_ERROR);
+
         this.name = name;
     }
 
@@ -32,7 +33,8 @@ public class PilotImpl implements Pilot {
 
     @Override
     public void addMachine(Machine machine) {
-
+        Validation.requireNonNull(machine, MACHINE_MISSING_ERROR);
+        this.machines.add(machine);
     }
 
     @Override

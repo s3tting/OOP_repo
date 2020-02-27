@@ -1,5 +1,6 @@
 package entities;
 
+import common.Validation;
 import entities.interfaces.Machine;
 import entities.interfaces.Pilot;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public abstract class BaseMachine implements Machine {
     private static final String NAME_MISSING_ERROR = "Machine name cannot be null or empty.";
     private static final String PILOT_MISSING_ERROR = "Pilot cannot be null.";
+    private static final String TARGET_MISSING_ERROR = "Attack target cannot be null or empty string";
 
     private String name; //validation
     private Pilot pilot;
@@ -28,17 +30,15 @@ public abstract class BaseMachine implements Machine {
 
     @Override
     public void setName(String name) {
-        if(name == null || name.trim().isEmpty()){
-            throw new IllegalArgumentException(NAME_MISSING_ERROR);
-        }
+        Validation.requireNonEmptyString(name,NAME_MISSING_ERROR);
+
         this.name = name;
     }
 
     @Override
     public void setPilot(Pilot pilot) {
-        if (pilot == null){
-            throw new NullPointerException(PILOT_MISSING_ERROR);
-        }
+        Validation.requireNonNull(pilot , PILOT_MISSING_ERROR);
+
         this.pilot = pilot;
     }
 
@@ -76,12 +76,21 @@ public abstract class BaseMachine implements Machine {
 
     @Override
     public void setHealthPoints(double healthPoints) {
+        if(healthPoints < 0){
+            healthPoints = 0;
+        }
         this.healthPoints = healthPoints;
     }
 
     @Override
     public List<String> getTargets() {
         return Collections.unmodifiableList(targets);
+    }
+
+    @Override
+    public void attack(String target) {
+        Validation.requireNonEmptyString(target,TARGET_MISSING_ERROR);
+        this.targets.add(target);
     }
 
 }
