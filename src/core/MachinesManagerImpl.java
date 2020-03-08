@@ -34,6 +34,9 @@ public class MachinesManagerImpl implements MachinesManager {
 
     @Override
     public String hirePilot(String name) {
+        if (this.pilots.containsKey(name)){
+            return String.format(OutputMessages.pilotExists , name);
+        }
         Pilot pilot = this.pilotFactory.createPilot(name);
         this.pilots.put(name, pilot);
 
@@ -83,6 +86,10 @@ public class MachinesManagerImpl implements MachinesManager {
             return String.format(OutputMessages.machineNotFound, selectedMachineName);
         }
 
+        if (machine.getPilot() != null){
+            return String.format(OutputMessages.machineHasPilotAlready , selectedMachineName);
+        }
+
         machine.setPilot(pilot);
         pilot.addMachine(machine);
 
@@ -113,28 +120,38 @@ public class MachinesManagerImpl implements MachinesManager {
     @Override
     public String pilotReport(String pilotName) {
         Pilot pilot = this.pilots.get(pilotName);
+
+        if (pilot == null){
+            return String.format(OutputMessages.pilotNotFound , pilotName);
+        }
         return pilot.report();
     }
 
     @Override
     public String toggleFighterAggressiveMode(String fighterName) {
-        Fighter fighter = (Fighter) this.machines.get(fighterName);
+        Machine fighter = this.machines.get(fighterName);
 
         if (fighter == null) {
             return String.format(OutputMessages.machineNotFound, fighterName);
         }
-        fighter.toggleAggressiveMode();
+        if (!(fighter instanceof Fighter)){
+            return String.format(OutputMessages.notSupportedOperation, fighterName);
+        }
+        ((Fighter)fighter).toggleAggressiveMode();
         return String.format(OutputMessages.fighterOperationSuccessful, fighterName);
     }
 
     @Override
     public String toggleTankDefenseMode(String tankName) {
-        Tank tank = (Tank) this.machines.get(tankName);
+        Machine tank = this.machines.get(tankName);
 
         if (tank == null) {
             return String.format(OutputMessages.machineNotFound, tankName);
         }
-        tank.toggleDefenseMode();
+        if (!(tank instanceof Tank)){
+            return String.format(OutputMessages.notSupportedOperation, tankName);
+        }
+        ((Tank)tank).toggleDefenseMode();
         return String.format(OutputMessages.tankOperationSuccessful , tankName);
     }
 }

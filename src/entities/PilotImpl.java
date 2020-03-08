@@ -7,6 +7,7 @@ import entities.interfaces.Pilot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PilotImpl implements Pilot {
     private static final String NAME_MISSING_ERROR = "Pilot name cannot be null or empty string.";
@@ -21,7 +22,7 @@ public class PilotImpl implements Pilot {
     }
 
     public void setName(String name) {
-        Validation.requireNonEmptyString(name,NAME_MISSING_ERROR);
+        Validation.requireNonEmptyString(name, NAME_MISSING_ERROR);
 
         this.name = name;
     }
@@ -44,6 +45,11 @@ public class PilotImpl implements Pilot {
 
     @Override
     public String report() {
-        return null;
+        int machinesSize = this.machines.size();
+        String machinesStr = this.machines.stream()
+                .map(m -> "- " + m.toString()).
+                        collect(Collectors.joining(System.lineSeparator()));
+        return String.format("%s - %d machines%s",
+                this.name, machinesSize, machinesSize == 0 ? "" : System.lineSeparator() + machinesStr);
     }
 }

@@ -42,4 +42,14 @@ public class TankImpl extends BaseMachine implements Tank {
         return 0;
     }
 
+    @Override
+    protected String getSimpleName() {
+        return "Tank";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s%n *Defense Mode(%s)",
+                super.toString() , this.defenceMode ? "ON" : "OFF");
+    }
 }

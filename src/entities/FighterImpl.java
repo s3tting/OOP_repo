@@ -42,4 +42,14 @@ public class FighterImpl extends BaseMachine implements Fighter  {
         return 0;
     }
 
+    @Override
+    protected String getSimpleName() {
+        return "Fighter";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s%n *Aggressive Mode(%s)",
+                super.toString() , this.aggressiveMode ? "ON" : "OFF");
+    }
 }

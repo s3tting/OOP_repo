@@ -26,6 +26,7 @@ public abstract class BaseMachine implements Machine {
         this.defencePoints = defencePoints;
         this.healthPoints = healthPoints;
         this.targets = new ArrayList<>();
+        this.pilot = null;
     }
 
     @Override
@@ -93,4 +94,23 @@ public abstract class BaseMachine implements Machine {
         this.targets.add(target);
     }
 
+    @Override
+    public String toString() {
+        String targetsList = String.join(", " ,this.targets);
+
+        return String.format("%s%n" +
+                " *Type: %s%n"+
+                " *Health: %.2f%n" +
+                " *Attack: %.2f%n" +
+                " *Defence: %.2f%n" +
+                " *Targets: %s",
+                this.name ,
+                this.getSimpleName(),
+                this.healthPoints,
+                this.attackPoints ,
+                this.defencePoints ,
+                targetsList.isEmpty() ? "None" : targetsList);
+    }
+
+    protected abstract String getSimpleName();
 }
